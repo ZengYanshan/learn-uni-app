@@ -35,8 +35,8 @@ src/
 │   │   ├── logo.png        # 应用Logo
 │   │   └── kfc.jpg         # 商家图片
 │   └── data/               # 模拟数据（JSON文件）
-│       ├── shops.json      # 商家数据
-│       └── foods.json      # 菜品数据
+│       ├── shops.js        # 商家数据
+│       └── foods.js        # 菜品数据
 ├── store/                  # Vuex状态管理（模拟数据持久化）
 │   ├── index.js            # Vuex主文件
 │   ├── modules/            # 模块划分
@@ -103,6 +103,7 @@ HomePage.vue
 
 <script>
 import ShopCard from '@/components/ShopCard.vue';
+import shops from '@/static/data/shops.js';
 
 export default {
   components: { ShopCard },
@@ -126,15 +127,17 @@ export default {
   methods: {
     // 加载商家数据
     async loadShops() {
-      try {
-        const res = await uni.request({
-          url: '/static/data/shops.json',
-          dataType: 'json'
-        });
-        this.shops = res.data;
-      } catch (e) {
-        console.error('加载商家数据失败', e);
-      }
+      // try {
+      //   const res = await uni.request({
+      //     url: '/static/data/shops.json',
+      //     dataType: 'json'
+      //   });
+      //   this.shops = res.data;
+      // } catch (e) {
+      //   console.error('加载商家数据失败', e);
+      // }
+	  this.shops = shops;
+	  console.log(this.shop);
     },
     // 跳转到商家列表页
     gotoShopList() {
@@ -290,6 +293,7 @@ ShopListPage.vue
 
 <script>
 import ShopCard from '@/components/ShopCard.vue';
+import shops from '@/static/data/shops.js';
 
 export default {
   components: { ShopCard },
@@ -313,16 +317,18 @@ export default {
   methods: {
     // 加载商家数据
     async loadShops() {
-      try {
-        const res = await uni.request({
-          url: '/static/data/shops.json',
-          dataType: 'json'
-        });
-        this.allShops = res.data;
-        this.filteredShops = res.data;
-      } catch (e) {
-        console.error('加载商家数据失败', e);
-      }
+      // try {
+      //   const res = await uni.request({
+      //     url: '/static/data/shops.json',
+      //     dataType: 'json'
+      //   });
+      //   this.allShops = res.data;
+      //   this.filteredShops = res.data;
+      // } catch (e) {
+      //   console.error('加载商家数据失败', e);
+      // }
+	  this.allShops = shops;
+	  this.filteredShops = shops;
     },
     // 搜索商家
     searchShops() {
@@ -470,7 +476,7 @@ export default {
 shops.js
 
 ```
-[
+const shops = [
   {
     "id": 1,
     "name": "肯德基",
@@ -543,13 +549,14 @@ shops.js
       }
     ]
   }
-]
+];
+export default shops;
 ```
 
 foods.js
 
 ```
-[
+const foods = [
   {
     "id": 101,
     "name": "香辣鸡腿堡",
@@ -613,6 +620,7 @@ foods.js
     "price": 28.00,
     "description": "意大利经典甜品，咖啡香与马斯卡彭奶酪的完美结合"
   }
-]
+];
+export default foods;
 ```
 
