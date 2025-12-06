@@ -22,6 +22,8 @@ src/
 │       ├── ProfilePage.vue  # 个人中心页
 │       └── AddressEditPage.vue # 地址编辑页
 ├── components/             # 公共组件
+│   ├── bottom-cart/        # 底部购物车相关
+│   │   ├── BottomCart.vue  # 底部购物车
 │   ├── ShopHeader.vue      # 商家Header组件
 │   ├── Tab.vue             # 滑动切换组件
 │   ├── FoodList.vue        # 菜品列表组件

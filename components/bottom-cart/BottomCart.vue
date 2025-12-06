@@ -1,8 +1,320 @@
 <template>
+	<!-- 底部购物车 -->
+	<view class="bottom-cart">
+		<view class="content" @click="toggleList">
+			<view class="content-left">
+				<view class="logo-wrapper">
+					<view class="logo" :class="{'highlight': totalCount > 0}">
+						<image class="icon-bottom_cart" :class="{'highlight': totalCount > 0}"
+							src="/static/images/icon-cart.png" />
+					</view>
+					<view class="num" v-show="totalCount > 0">
+						<bubble :num='totalCount' />
+					</view>
+				</view>
+				<text class="price" :class="{'highlight': totalPrice > 0}">
+					￥{{ totalPrice }}
+				</text>
+				<text class="desc">另需配送费￥{{ deliveryFee }}元</text>
+			</view>
+			<view class="content-right" @click.stop="pay">
+				<view class="pay" :class="payClass">
+					{{ payDesc }}
+				</view>
+			</view>
+		</view>
+
+		<!-- 动画小球 -->
+		<view class="ball-container">
+			<view v-for="(ball,index) in balls" :key="index">
+				<transition @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+					<view class="ball" v-show="ball.show">
+						<view class="inner inner-hook"></view>
+					</view>
+				</transition>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
+	import Bubble from '@/components/Bubble.vue';
+
+	const BALL_COUNT = 10;
+	const INNER_CLASS_HOOK = 'inner-hook';
+
+	function createBalls() {
+		let balls = [];
+		for (let i = 0; i < BALL_COUNT; i++) {
+			balls.push({
+				show: false
+			});
+		}
+		return balls;
+	}
+
+	export default {
+		name: 'BottomCart',
+		props: {
+			selectedFoods: {
+				type: Array,
+				default: () => []
+			},
+			deliveryFee: {
+				type: Number,
+				default: 0
+			},
+			sticky: {
+				type: Boolean,
+				default: false
+			},
+			fold: {
+				type: Boolean,
+				default: true
+			}
+		},
+		data() {
+			return {
+				balls: createBalls(),
+				listFold: this.fold
+			};
+		},
+		created() {
+			this.balls = [];
+		},
+		computed: {
+			totalPrice() {
+				return this.selectedFoods.reduce(
+					(total, food) => total + food.price * food.count,
+					0
+				);
+			},
+			totalCount() {
+				return this.selectedFoods.reduce(
+					(count, food) => count + food.count,
+					0
+				);
+			},
+			payDesc() {
+				if (this.totalPrice === 0) {
+					return `未选择`;
+				} else {
+					return '去结算';
+				}
+			},
+			payClass() {
+				return this.totalCount ? 'enough' : 'not-enough';
+			}
+		},
+		methods: {
+			toggleList() {
+				if (this.listFold) {
+					if (!this.totalCount) return;
+					this.listFold = false;
+					this.$emit('toggle-list');
+				} else {
+					this.listFold = true;
+				}
+			},
+
+			async pay(e) {
+
+				await uni.showModal({
+					title: '支付确认',
+					content: `您需要支付${this.totalPrice}元`,
+					success: (res) => {
+						if (res.confirm) {
+							this.$emit('payment-confirmed');
+						}
+					}
+				});
+			},
+
+			drop(el) {
+				for (let i = 0; i < this.balls.length; i++) {
+					const ball = this.balls[i];
+					if (!ball.show) {
+						ball.show = true;
+						ball.el = el;
+						this.dropBalls.push(ball);
+						return;
+					}
+				}
+			},
+			beforeDrop(el) {
+				const ball = this.dropBalls[this.dropBalls.length - 1];
+				const rect = ball.el.getBoundingClientRect();
+				const x = rect.left - 32;
+				const y = -(window.innerHeight - rect.top - 22);
+				el.style.display = '';
+				el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+				const inner = el.getElementsByClassName(innerClsHook)[0];
+				inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+			},
+			dropping(el, done) {
+				this._reflow = document.body.offsetHeight;
+				el.style.transform = el.style.webkitTransform = `translate3d(0,0,0)`;
+				const inner = el.getElementsByClassName(innerClsHook)[0];
+				inner.style.transform = inner.style.webkitTransform = `translate3d(0,0,0)`;
+				el.addEventListener('transitionend', done);
+			},
+			afterDrop(el) {
+				const ball = this.dropBalls.shift();
+				if (ball) {
+					ball.show = false;
+					el.style.display = 'none';
+				}
+			},
+		},
+		watch: {
+			fold(newVal) {
+				this.listFold = newVal;
+			}
+		},
+		components: {
+			Bubble
+		}
+	};
 </script>
 
-<style>
+<style scoped>
+	.bottom-cart {
+		height: 100%;
+		position: relative;
+	}
+
+	.content {
+		display: flex;
+		background: #2d343c;
+		color: rgba(255, 255, 255, 0.4);
+		font-size: 0;
+	}
+
+	.content-left {
+		flex: 1;
+		display: flex;
+		align-items: center;
+	}
+
+	.logo-wrapper {
+		position: relative;
+		margin: 0 24rpx;
+		padding: 12rpx;
+		width: 112rpx;
+		height: 112rpx;
+		box-sizing: border-box;
+		border-radius: 50%;
+		background: #2d343c;
+	}
+
+	.logo {
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		text-align: center;
+		background: #2b333b;
+	}
+
+	.logo.highlight {
+		background: #00a0dc;
+	}
+
+	.icon-bottom_cart {
+		display: block;
+		width: 44rpx;
+		height: 44rpx;
+		margin: 22rpx auto;
+	}
+
+	.icon-bottom_cart.highlight {
+		color: #fff;
+	}
+
+	.num {
+		position: absolute;
+		top: -10rpx;
+		right: 0;
+		background: #f01414;
+		border-radius: 30rpx;
+		padding: 0 16rpx;
+		min-width: 40rpx;
+		height: 40rpx;
+		line-height: 40rpx;
+		text-align: center;
+		font-size: 24rpx;
+		color: #fff;
+	}
+
+	.price {
+		display: inline-block;
+		vertical-align: top;
+		margin-top: 24rpx;
+		line-height: 48rpx;
+		padding-right: 24rpx;
+		box-sizing: border-box;
+		border-right: 1px solid rgba(255, 255, 255, 0.1);
+		font-weight: 700;
+		font-size: 32rpx;
+	}
+
+	.price.highlight {
+		color: #fff;
+	}
+
+	.desc {
+		display: inline-block;
+		vertical-align: top;
+		margin: 24rpx 0 0 24rpx;
+		line-height: 48rpx;
+		font-size: 24rpx;
+	}
+
+	.content-right {
+		flex: 0 0 210rpx;
+		width: 210rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.pay {
+		height: 96rpx;
+		line-height: 96rpx;
+		text-align: center;
+		font-weight: 700;
+		font-size: 28rpx;
+	}
+
+	.pay.not-enough {
+		background: #2b333b;
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.pay.enough {
+		background: #00b43c;
+		color: #fff;
+	}
+
+	.ball-container {
+		position: absolute;
+		left: 0;
+		bottom: 100rpx;
+		z-index: 200;
+	}
+
+	.ball-container.ball {
+		position: fixed;
+		left: 32rpx;
+		bottom: 22rpx;
+		z-index: 200;
+		transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+	}
+	.ball-container.ball.inner {
+		width: 16rpx;
+		height: 16rpx;
+		border-radius: 50%;
+		background: blue;
+		transition: all 0.4s linear;
+	}
+
 </style>

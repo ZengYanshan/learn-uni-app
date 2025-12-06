@@ -18,7 +18,7 @@
 				</view>
 
 				<!-- 食物列表 -->
-				<view v-for="food in category.foods" :key="food.id" class="food-item" @click="selectFood(food)">
+				<view v-for="food in category.foods" :key="food.id" class="food-item" @click="clickFood(food)">
 					<view class="food-header">
 						<image class="food-icon" :src="food.image" mode="aspectFill" />
 						<view class="food-info">
@@ -33,22 +33,24 @@
 								<!-- <text v-if="food.oldPrice" class="old">¥{{ food.oldPrice }}</text> -->
 							</view>
 						</view>
-						<view class="cart-control">
-							<view class="count-control">
-								<text @click.stop="decrement(food)">-</text>
-								<text>{{ food.count || 0 }}</text>
-								<text @click.stop="increment(food)">+</text>
-							</view>
+						<!-- 加减号 -->
+						<view class="food-count-controller-wrapper">
+							<food-count-controller @add='onAdd' :food='food' />
 						</view>
 					</view>
 				</view>
 			</view>
 		</scroll-view>
+		<view class="bottom-cart-wrapper">
+			<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee" />
+		</view>
 	</view>
 </template>
 
 <script>
 	import BottomCart from '@/components/bottom-cart/BottomCart.vue';
+	import FoodCountController from '@/components/bottom-cart/FoodCountController.vue';
+	import Bubble from '@/components/Bubble.vue';
 	import foods from '@/static/data/foods.js';
 
 	export default {
@@ -65,6 +67,19 @@
 				foodCategories: [],
 				allFoods: []
 			};
+		},
+		computed: {
+			selectedFoods() {
+				let _selectedFoods = [];
+				this.foodCategories.forEach((category) => {
+					category.foods.forEach((food) => {
+						if (food.count) {
+							_selectedFoods.push(food);
+						}
+					})
+				})
+				return _selectedFoods;
+			},
 		},
 		watch: {
 			// 监听data变化，当shop数据就绪时初始化
@@ -134,35 +149,25 @@
 				if (this.foodCategories.length > 0) {
 					this.currentCategory = this.foodCategories[0].name;
 				}
-				console.log("foodCategories = ", this.foodCategories);
+				// console.log("foodCategories = ", this.foodCategories);
 			},
 			switchCategory(categoryName) {
 				this.currentCategory = categoryName;
 			},
-			selectFood(food) {
+			clickFood(food) {
 				// 跳转到菜品详情页
 				uni.navigateTo({
 					url: `/pages/shop/FoodDetailPage?id=${food.id}`
 				});
 			},
-			increment(food) {
-				food.count = (food.count || 0) + 1;
-				// 触发购物车更新
-				this.$emit('update-cart', {
-					food,
-					action: 'add'
-				});
+			onAdd(target) {
+				this.$refs.bottomCart.drop(target);
 			},
-			decrement(food) {
-				if (food.count > 0) {
-					food.count -= 1;
-					// 触发购物车更新
-					this.$emit('update-cart', {
-						food,
-						action: 'remove'
-					});
-				}
-			}
+		},
+		components: {
+			Bubble,
+			BottomCart,
+			FoodCountController
 		}
 	};
 </script>
@@ -282,25 +287,18 @@
 		text-decoration: line-through;
 	}
 
-	.cart-control {
+	.food-count--controller-wrapper {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
 	}
 
-	.count-control {
-		display: flex;
-		align-items: center;
-		margin-left: 20rpx;
-		text-align: center;
-	}
-
-	.count-control text {
-		width: 40rpx;
-		height: 40rpx;
-		line-height: 40rpx;
-		border-radius: 50%;
-		border: 1rpx solid #ddd;
-		margin: 0 5rpx;
+	.bottom-cart-wrapper {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		z-index: 50;
+		width: 100%;
+		height: 100rpx;
 	}
 </style>
