@@ -1,0 +1,130 @@
+{
+  "pages": [
+    // 首页模块
+    {
+      "path": "pages/home/HomePage",
+      "style": {
+        "navigationBarTitleText": "外卖首页",
+        "navigationBarBackgroundColor": "#FF5A5F",
+        "navigationBarTextStyle": "white",
+        "enablePullDownRefresh": true,
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/home/ShopListPage",
+      "style": {
+        "navigationBarTitleText": "商家列表",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    
+    // 商家模块
+    {
+      "path": "pages/shop/ShopDetailPage",
+      "style": {
+        "navigationBarTitleText": "商家详情",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/shop/FoodDetailPage",
+      "style": {
+        "navigationBarTitleText": "菜品详情",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    
+    // 购物车与订单模块
+    {
+      "path": "pages/cart/CartPage",
+      "style": {
+        "navigationBarTitleText": "购物车",
+        "navigationBarBackgroundColor": "#FF5A5F",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/cart/OrderConfirmPage",
+      "style": {
+        "navigationBarTitleText": "确认订单",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/cart/OrderListPage",
+      "style": {
+        "navigationBarTitleText": "我的订单",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/cart/OrderDetailPage",
+      "style": {
+        "navigationBarTitleText": "订单详情",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    
+    // 个人中心模块
+    {
+      "path": "pages/profile/ProfilePage",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#333333",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    },
+    {
+      "path": "pages/profile/AddressEditPage",
+      "style": {
+        "navigationBarTitleText": "编辑地址",
+        "navigationBarBackgroundColor": "#FFFFFF",
+        "navigationStyle": "custom" // 隐藏顶部标题栏
+      }
+    }
+  ],
+  
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "外卖APP",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8",
+    "navigationStyle": "custom" // 全局隐藏标题栏（可选，如果所有页面都配置了则可省略）
+  },
+  
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF5A5F",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/HomePage",
+        "text": "首页",
+        "iconPath": "static/images/tab-home.png",
+        "selectedIconPath": "static/images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/cart/CartPage",
+        "text": "购物车",
+        "iconPath": "static/images/tab-cart.png",
+        "selectedIconPath": "static/images/tab-cart-active.png"
+      },
+      {
+        "pagePath": "pages/profile/ProfilePage",
+        "text": "我的",
+        "iconPath": "static/images/tab-profile.png",
+        "selectedIconPath": "static/images/tab-profile-active.png"
+      }
+    ]
+  }
+}
