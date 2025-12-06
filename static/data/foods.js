@@ -1,4 +1,4 @@
-const foods = [
+const FOODS = [
   {
     "id": 101,
     "name": "香辣鸡腿堡",
@@ -63,4 +63,4 @@ const foods = [
     "description": "意大利经典甜品，咖啡香与马斯卡彭奶酪的完美结合"
   }
 ];
-export default foods;
+export default FOODS;

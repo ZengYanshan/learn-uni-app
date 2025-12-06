@@ -48,7 +48,7 @@
 
 <script>
 import ShopCard from '@/components/ShopCard.vue';
-import shops from '@/static/data/shops.js';
+import SHOPS from '@/static/data/shops.js';
 
 export default {
   components: { ShopCard },
@@ -82,8 +82,8 @@ export default {
       // } catch (e) {
       //   console.error('加载商家数据失败', e);
       // }
-	  this.allShops = shops;
-	  this.filteredShops = shops;
+	  this.allShops = SHOPS;
+	  this.filteredShops = SHOPS;
     },
     // 搜索商家
     searchShops() {

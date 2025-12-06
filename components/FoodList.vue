@@ -51,7 +51,7 @@
 	import BottomCart from '@/components/bottom-cart/BottomCart.vue';
 	import FoodCountController from '@/components/bottom-cart/FoodCountController.vue';
 	import Bubble from '@/components/Bubble.vue';
-	import foods from '@/static/data/foods.js';
+	import FOODS from '@/static/data/foods.js';
 
 	export default {
 		name: 'FoodList',
@@ -106,7 +106,7 @@
 				// } catch (error) {
 				// 	console.error('加载菜品数据失败', error);
 				// }
-				this.allFoods = foods;
+				this.allFoods = FOODS;
 			},
 			async initializeFoodData() {
 				console.log('initializeFoodData()');

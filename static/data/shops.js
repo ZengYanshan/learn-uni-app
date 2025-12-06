@@ -1,4 +1,4 @@
-const shops = [
+const SHOPS = [
   {
     "id": 1,
     "name": "肯德基",
@@ -72,4 +72,4 @@ const shops = [
     ]
   }
 ];
-export default shops;
+export default SHOPS;

@@ -19,7 +19,7 @@
 	import Tab from '@/components/Tab.vue';
 	import FoodList from '@/components/FoodList.vue';
 	import CommentList from '@/components/CommentList.vue';
-	import shops from '@/static/data/shops.js';
+	import SHOPS from '@/static/data/shops.js';
 
 	export default {
 		components: {
@@ -78,7 +78,7 @@
 				// } catch (e) {
 				// 	console.error('加载数据失败', e);
 				// }
-				this.shop = shops.find(s => s.id == shopId) || {};
+				this.shop = SHOPS.find(s => s.id == shopId) || {};
 			},
 
 			goBack() {
