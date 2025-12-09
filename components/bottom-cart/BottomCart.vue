@@ -24,7 +24,7 @@
 			</view>
 		</view>
 
-		<!-- 动画小球 -->
+		<!-- TODO 动画小球 -->
 		<view class="ball-container">
 			<view v-for="(ball,index) in balls" :key="index">
 				<transition @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
@@ -34,10 +34,15 @@
 				</transition>
 			</view>
 		</view>
+
+		<bottom-cart-list :visible='listShow' :selected-foods='selectedFoods' @hide='hideList'
+			@add="onAdd" @empty="emptyBottomCart" />
+
 	</view>
 </template>
 
 <script>
+	import BottomCartList from './BottomCartList.vue';
 	import Bubble from '@/components/Bubble.vue';
 
 	const BALL_COUNT = 10;
@@ -76,7 +81,8 @@
 		data() {
 			return {
 				balls: createBalls(),
-				listFold: this.fold
+				listFold: this.fold,
+				listShow: false // 控制购物车列表显示
 			};
 		},
 		created() {
@@ -111,10 +117,15 @@
 				if (this.listFold) {
 					if (!this.totalCount) return;
 					this.listFold = false;
+					this.listShow = true;
 					this.$emit('toggle-list');
 				} else {
-					this.listFold = true;
+					this.hideList();
 				}
+			},
+			hideList() {
+				this.listFold = true;
+				this.listShow = false;
 			},
 
 			async pay(e) {
@@ -165,6 +176,12 @@
 					el.style.display = 'none';
 				}
 			},
+			
+			clearCart() {
+				// 清空购物车
+				this.$emit('clear');
+				this.hideList();
+			}
 		},
 		watch: {
 			fold(newVal) {
@@ -172,6 +189,7 @@
 			}
 		},
 		components: {
+			BottomCartList,
 			Bubble
 		}
 	};
@@ -188,6 +206,9 @@
 		background: #2d343c;
 		color: rgba(255, 255, 255, 0.4);
 		font-size: 0;
+		
+		position: relative;
+		z-index: 100;
 	}
 
 	.content-left {
@@ -309,6 +330,7 @@
 		z-index: 200;
 		transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
 	}
+
 	.ball-container.ball.inner {
 		width: 16rpx;
 		height: 16rpx;
@@ -316,5 +338,4 @@
 		background: blue;
 		transition: all 0.4s linear;
 	}
-
 </style>

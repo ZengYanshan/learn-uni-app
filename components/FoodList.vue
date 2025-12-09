@@ -41,8 +41,10 @@
 				</view>
 			</view>
 		</scroll-view>
+		<!-- 底部购物车 -->
 		<view class="bottom-cart-wrapper">
-			<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee" />
+			<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee"
+				@pay="handlePay" @add="handleAdd" @clear="handleClear" />
 		</view>
 	</view>
 </template>
@@ -163,6 +165,21 @@
 			onAdd(target) {
 				this.$refs.bottomCart.drop(target);
 			},
+
+			handlePay(totalPrice) {
+				// 处理支付逻辑
+				console.log('支付金额:', totalPrice);
+			},
+			handleAdd(target) {
+				// 添加商品到购物车
+				this.$refs.bottomCart.drop(target);
+			},
+			handleClear() {
+				// 清空购物车
+				this.selectFoods.forEach(food => {
+					this.$set(food, 'count', 0);
+				});
+			}
 		},
 		components: {
 			Bubble,
