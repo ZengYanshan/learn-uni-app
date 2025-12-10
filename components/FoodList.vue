@@ -176,7 +176,7 @@
 			},
 			handleClear() {
 				// 清空购物车
-				this.selectFoods.forEach(food => {
+				this.selectedFoods.forEach(food => {
 					this.$set(food, 'count', 0);
 				});
 			}
