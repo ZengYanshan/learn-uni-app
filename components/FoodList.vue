@@ -20,7 +20,7 @@
 				<!-- 食物列表 -->
 				<view v-for="food in category.foods" :key="food.id" class="food-item" @click="clickFood(food)">
 					<view class="food-header">
-						<image class="food-icon" :src="food.image" mode="aspectFill" />
+						<image class="food-img" :src="food.image" mode="aspectFill" />
 						<view class="food-info">
 							<text class="name">{{ food.name }}</text>
 							<text class="desc">{{ food.description }}</text>
@@ -253,7 +253,7 @@
 		align-items: center;
 	}
 
-	.food-icon {
+	.food-img {
 		width: 120rpx;
 		height: 120rpx;
 		margin-right: 20rpx;

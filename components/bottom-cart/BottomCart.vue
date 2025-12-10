@@ -1,22 +1,30 @@
 <template>
 	<!-- 底部购物车 -->
 	<view class="bottom-cart">
+		<!-- 购物车主体 -->
 		<view class="content" @click="toggleList">
+			<!-- 左栏 -->
 			<view class="content-left">
+				
 				<view class="logo-wrapper">
+					<!-- 购物车图标 -->
 					<view class="logo" :class="{'highlight': totalCount > 0}">
 						<image class="icon-bottom_cart" :class="{'highlight': totalCount > 0}"
 							src="/static/images/icon-cart.png" />
 					</view>
+					<!-- 总数 -->
 					<view class="num" v-show="totalCount > 0">
 						<bubble :num='totalCount' />
 					</view>
 				</view>
+				<!-- 总价 -->
 				<text class="price" :class="{'highlight': totalPrice > 0}">
 					￥{{ totalPrice }}
 				</text>
+				<!-- 配送费 -->
 				<text class="desc">另需配送费￥{{ deliveryFee }}元</text>
 			</view>
+			<!-- 支付按钮 -->
 			<view class="content-right" @click.stop="pay">
 				<view class="pay" :class="payClass">
 					{{ payDesc }}
@@ -36,7 +44,7 @@
 		</view>
 
 		<bottom-cart-list :visible='listShow' :selected-foods='selectedFoods' @hide='hideList'
-			@add="onAdd" @empty="emptyBottomCart" />
+			@add="onAdd" @clear="clearList" />
 
 	</view>
 </template>
@@ -177,7 +185,7 @@
 				}
 			},
 			
-			clearCart() {
+			clearList() {
 				// 清空购物车
 				this.$emit('clear');
 				this.hideList();

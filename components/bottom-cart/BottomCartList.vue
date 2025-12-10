@@ -7,8 +7,10 @@
 						<text class="title">购物车</text>
 						<text class="clear" @tap="clear">清空</text>
 					</view>
-					<scroll-view class="list-content" scroll-y ref="listContent" :style="{maxHeight: '217rpx'}">
+					<!-- 食物列表 -->
+					<scroll-view class="list-content" scroll-y ref="listContent" :style="{maxHeight: '400rpx'}">
 						<view v-for="(food, index) in selectedFoods" :key="index" class="food">
+							<image class="img" :src="food.image" mode="aspectFill" />
 							<text class="name">{{food.name}}</text>
 							<view class="price">
 								<text>￥{{food.price * food.count}}</text>
@@ -41,13 +43,13 @@
 		},
 		methods: {
 			onAdd(target) {
-				this.$emit('add', target)
+				this.$emit('add', target);
 			},
 			maskClick() {
-				this.$emit('hide')
+				this.$emit('hide');
 			},
 			clear() {
-				this.$emit('clear')
+				this.$emit('clear');
 			}
 		},
 		components: {
@@ -132,26 +134,33 @@
 		padding: 12rpx 0;
 		box-sizing: border-box;
 	}
+	
+	.list-content .food .img {
+		width: 120rpx;
+		height: 120rpx;
+		margin-right: 20rpx;
+		border-radius: 8rpx;
+	}
 
 	.list-content .food .name {
-		line-height: 24rpx;
-		font-size: $fontsize-medium;
-		color: dark-grey;
+		position: absolute;
+		/* 与 .list-content .food padding 保持一致 */
+		top: 12rpx;
 	}
 
 	.list-content .food .price {
 		position: absolute;
-		right: 90rpx;
+		/* 与 .list-content .food .img width + margin-right 保持一致 */
+		left: 140rpx;
+		/* 与 .list-content .food padding 保持一致 */
 		bottom: 12rpx;
-		line-height: 24rpx;
 		font-weight: 700;
-		font-size: $fontsize-medium;
 		color: red;
 	}
 
 	.list-content .food .food-count-controller-wrapper {
 		position: absolute;
-		right: 0;
-		bottom: 6rpx;
+		right: 30rpx;
+		bottom: 12rpx;
 	}
 </style>
