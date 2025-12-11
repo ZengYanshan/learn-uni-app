@@ -44,7 +44,7 @@
 		</view>
 
 		<bottom-cart-list :visible='listShow' :selected-foods='selectedFoods' @hide='hideList'
-			@add="onAdd" @clear="clearList" />
+			@add="onAdd" @sub='onSub' @clear="onClear" />
 
 	</view>
 </template>
@@ -137,16 +137,17 @@
 			},
 
 			async pay(e) {
-
-				await uni.showModal({
-					title: '支付确认',
-					content: `您需要支付${this.totalPrice}元`,
-					success: (res) => {
-						if (res.confirm) {
-							this.$emit('payment-confirmed');
-						}
-					}
-				});
+				// TODO 支付
+				this.$emit('pay', this.totalPrice);
+				// await uni.showModal({
+				// 	title: '支付确认',
+				// 	content: `您需要支付${this.totalPrice}元`,
+				// 	success: (res) => {
+				// 		if (res.confirm) {
+				// 			this.$emit('payment-confirmed');
+				// 		}
+				// 	}
+				// });
 			},
 
 			drop(el) {
@@ -184,12 +185,23 @@
 					el.style.display = 'none';
 				}
 			},
-			
-			clearList() {
+			onAdd(food) {
+				this.$emit('add', food);
+			},
+			onSub(food) {
+				this.$emit('sub', food);
+			},
+			onClear() {
 				// 清空购物车
 				this.$emit('clear');
 				this.hideList();
-			}
+			},
+			// onAdd(food) {
+			// 	this.$emit('add', food);
+			// },
+			// onSub(food) {
+			// 	this.$emit('sub', food);
+			// }
 		},
 		watch: {
 			fold(newVal) {

@@ -16,7 +16,7 @@
 								<text>￥{{food.price * food.count}}</text>
 							</view>
 							<view class="food-count-controller-wrapper">
-								<food-count-controller @add="onAdd" :food="food"></food-count-controller>
+								<food-count-controller @add="onAdd" @sub="onSub" :food="food"></food-count-controller>
 							</view>
 						</view>
 					</scroll-view>
@@ -27,7 +27,8 @@
 </template>
 
 <script>
-	import FoodCountController from '@/components/bottom-cart/FoodCountController.vue'
+	import FoodCountController from '@/components/FoodCountController.vue';
+	import FOODS from '../../static/data/foods';
 
 	export default {
 		name: 'BottomCartList',
@@ -42,8 +43,11 @@
 			}
 		},
 		methods: {
-			onAdd(target) {
-				this.$emit('add', target);
+			onAdd(food) {
+				this.$emit('add', food);
+			},
+			onSub(food) {
+				this.$emit('sub', food);
 			},
 			maskClick() {
 				this.$emit('hide');

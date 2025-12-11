@@ -1,6 +1,6 @@
 {
   "pages": [
-    // 首页模块
+    // 第一个页面为首页
     {
       "path": "pages/home/HomePage",
       "style": {

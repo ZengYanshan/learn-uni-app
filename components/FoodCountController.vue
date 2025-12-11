@@ -13,7 +13,6 @@
 </template>
 
 <script>
-	const EVENT_ADD = 'add';
 
 	export default {
 		name: 'FoodCountController',
@@ -25,17 +24,19 @@
 		},
 		methods: {
 			add(event) {
-				if (this.food.count === undefined) {
-					this.$set(this.food, 'count', 1);
-				} else {
-					this.food.count++;
-				}
-				this.$emit(EVENT_ADD, event.target);
+				// if (this.food.count === undefined) {
+				// 	this.$set(this.food, 'count', 1);
+				// } else {
+				// 	this.food.count++;
+				// }
+				// console.log(event.target);
+				this.$emit('add', this.food);
 			},
 			sub() {
-				if (this.food.count > 0) {
-					this.food.count--;
-				}
+				// if (this.food.count > 0) {
+				// 	this.food.count--;
+				// }
+				this.$emit('sub', this.food);
 			}
 		}
 	};

@@ -2,7 +2,7 @@
 	<view class="food-list">
 		<!-- 左侧分类导航 -->
 		<scroll-view class="category-nav" scroll-y>
-			<view v-for="(category, index) in foodCategories" :key="index" class="category-item"
+			<view v-for="(category, index) in foodsCategorizedInShop" :key="index" class="category-item"
 				:class="{ 'active': currentCategory === category.name }" @click="switchCategory(category.name)">
 				<text>{{ category.name }}</text>
 				<view v-if="currentCategory === category.name" class="active-indicator"></view>
@@ -11,7 +11,7 @@
 
 		<!-- 右侧商品列表 -->
 		<scroll-view class="food-container" scroll-y>
-			<view v-for="(category, idx) in foodCategories" :key="idx">
+			<view v-for="(category, idx) in foodsCategorizedInShop" :key="idx">
 				<!-- 分类名称 -->
 				<view class="category-title">
 					<text>{{ category.name }}</text>
@@ -35,7 +35,7 @@
 						</view>
 						<!-- 加减号 -->
 						<view class="food-count-controller-wrapper">
-							<food-count-controller @add='onAdd' :food='food' />
+							<food-count-controller @add='onAdd' @sub='onSub' :food='food' />
 						</view>
 					</view>
 				</view>
@@ -44,14 +44,14 @@
 		<!-- 底部购物车 -->
 		<view class="bottom-cart-wrapper">
 			<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee"
-				@pay="handlePay" @add="handleAdd" @clear="handleClear" />
+				@add='onAdd' @sub='onSub' @pay="onPay" @clear="onClear" />
 		</view>
 	</view>
 </template>
 
 <script>
 	import BottomCart from '@/components/bottom-cart/BottomCart.vue';
-	import FoodCountController from '@/components/bottom-cart/FoodCountController.vue';
+	import FoodCountController from '@/components/FoodCountController.vue';
 	import Bubble from '@/components/Bubble.vue';
 	import FOODS from '@/static/data/foods.js';
 
@@ -66,93 +66,113 @@
 		data() {
 			return {
 				currentCategory: '',
-				foodCategories: [],
-				allFoods: []
+				// foodsCategorizedInShop: [],
 			};
 		},
 		computed: {
-			selectedFoods() {
-				let _selectedFoods = [];
-				this.foodCategories.forEach((category) => {
-					category.foods.forEach((food) => {
-						if (food.count) {
-							_selectedFoods.push(food);
+			foodsCategorizedInShop() {
+				// 创建购物车数据的映射，以foodId为键
+				const cartMap = new Map();
+				this.$store.state.cart.cartData.forEach(item => {
+					cartMap.set(item.foodId, item.count);
+				});
+
+				// 构建分类数据结构
+				const categories = [];
+				if (this.data.shop?.menu) {
+					this.data.shop.menu.forEach(category => {
+						const foods = [];
+						if (category.items && Array.isArray(category.items)) {
+							category.items.forEach(item => {
+								const food = FOODS.find(f => f.id === item.foodId);
+								if (food) {
+									foods.push({
+										...food,
+										// 从购物车映射中获取数量，不存在则为0
+										count: cartMap.get(food.id) || 0,
+										category: category.category
+									});
+								}
+							});
 						}
-					})
-				})
+						categories.push({
+							name: category.category,
+							foods
+						});
+					});
+				}
+				return categories;
+			},
+			selectedFoods() {
+				// let _selectedFoods = [];
+				// this.foodsCategorizedInShop.forEach((category) => {
+				// 	category.foods.forEach((food) => {
+				// 		if (food.count) {
+				// 			_selectedFoods.push(food);
+				// 		}
+				// 	})
+				// })
+				// return _selectedFoods;
+				// console.log("update selectedFoods");
+				let _selectedFoods = this.$store.state.cart.cartData.map(item => {
+					const food = FOODS.find(f => f.id === item.foodId);
+					return {
+						...food,
+						count: item.count
+					};
+				});
+				console.log("selectedFoods = ", _selectedFoods);
 				return _selectedFoods;
 			},
 		},
-		watch: {
-			// 监听data变化，当shop数据就绪时初始化
-			'data.shop': {
-				handler(newVal) {
-					if (newVal && newVal.menu) {
-						console.log("watched");
-						this.initializeFoodData();
-					}
-				},
-				immediate: true, // 立即执行一次
-				deep: true
-			}
-		},
+		// watch: {
+		// 	// 监听data变化，当shop数据就绪时初始化
+		// 	'data.shop': {
+		// 		handler(newVal) {
+		// 			if (newVal && newVal.menu) {
+		// 				console.log("watched");
+		// 				this.initializeFoodData();
+		// 			}
+		// 		},
+		// 		immediate: true, // 立即执行一次
+		// 		deep: true
+		// 	}
+		// },
 		methods: {
-			async loadFoodData() {
-				// try {
-				// 	const res = await uni.request({
-				// 		url: '/static/data/foods.json',
-				// 		dataType: 'json'
-				// 	});
-				// 	this.allFoods = res.data;
-				// 	console.log("加载food数据成功");
-				// } catch (error) {
-				// 	console.error('加载菜品数据失败', error);
-				// }
-				this.allFoods = FOODS;
-			},
-			async initializeFoodData() {
-				console.log('initializeFoodData()');
-				if (this.allFoods.length === 0) {
-					console.log('开始加载foods数据...');
-					await this.loadFoodData();
-				}
-				// 添加防御性检查
-				if (!this.data?.shop?.menu || !Array.isArray(this.data.shop.menu)) {
-					console.warn('Shop menu data is not ready yet');
-					return;
-				}
+			// async initializeFoodData() {
+			// 	console.log('initializeFoodData()');
 
-				const categoryMap = new Map();
-				// 遍历
-				this.data.shop.menu.forEach(category => {
-					const foods = [];
+			// 	const categoryMap = new Map();
+			// 	// 遍历
+			// 	this.data.shop.menu.forEach(category => {
+			// 		const foods = [];
 
-					// 添加安全检查
-					if (category.items && Array.isArray(category.items)) {
-						category.items.forEach(item => {
-							const food = this.allFoods.find(f => f.id === item.foodId);
-							if (food) {
-								foods.push({
-									...food,
-									count: 0,
-									category: category.category
-								});
-							}
-						});
-					}
+			// 		// 添加安全检查
+			// 		if (category.items && Array.isArray(category.items)) {
+			// 			category.items.forEach(item => {
+			// 				const food = FOODS.find(f => f.id === item.foodId);
+			// 				if (food) {
+			// 					foods.push({
+			// 						...food,
+			// 						count: 0,
+			// 						category: category.category
+			// 					});
+			// 				}
+			// 			});
+			// 		}
 
-					categoryMap.set(category.category, {
-						name: category.category,
-						foods
-					});
-				});
+			// 		categoryMap.set(category.category, {
+			// 			name: category.category,
+			// 			foods
+			// 		});
+			// 	});
 
-				this.foodCategories = Array.from(categoryMap.values());
-				if (this.foodCategories.length > 0) {
-					this.currentCategory = this.foodCategories[0].name;
-				}
-				// console.log("foodCategories = ", this.foodCategories);
-			},
+			// 	this.foodsCategorizedInShop = Array.from(categoryMap.values());
+			// 	if (this.foodsCategorizedInShop.length > 0) {
+			// 		this.currentCategory = this.foodsCategorizedInShop[0].name;
+			// 	}
+			// 	console.log("foodsCategorizedInShop = ", this.foodsCategorizedInShop);
+			// },
 			switchCategory(categoryName) {
 				this.currentCategory = categoryName;
 			},
@@ -162,23 +182,25 @@
 					url: `/pages/shop/FoodDetailPage?id=${food.id}`
 				});
 			},
-			onAdd(target) {
-				this.$refs.bottomCart.drop(target);
+			async onAdd(food) {
+				console.log(food);
+				await this.$store.dispatch('cart/addFood', {
+					foodId: food.id
+				});
+				// this.$refs.bottomCart.drop(target);
 			},
-
-			handlePay(totalPrice) {
-				// 处理支付逻辑
+			async onSub(food) {
+				await this.$store.dispatch('cart/subFood', {
+					foodId: food.id
+				});
+				// this.$refs.bottomCart.drop(target);
+			},
+			onPay(totalPrice) {
+				// TODO 处理支付逻辑
 				console.log('支付金额:', totalPrice);
 			},
-			handleAdd(target) {
-				// 添加商品到购物车
-				this.$refs.bottomCart.drop(target);
-			},
-			handleClear() {
-				// 清空购物车
-				this.selectedFoods.forEach(food => {
-					this.$set(food, 'count', 0);
-				});
+			async onClear() {
+				await this.$store.dispatch('cart/clearCart');
 			}
 		},
 		components: {
