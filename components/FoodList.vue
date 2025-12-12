@@ -21,7 +21,7 @@
 				</view>
 
 				<!-- 食物列表 -->
-				<view v-for="food in category.foods" :key="food.id" class="food-item" @click="clickFood(food)">
+				<view v-for="food in category.foods" :key="food.id" class="food-item" @click="onClickFood(food)">
 					<view class="food-header">
 						<image class="food-img" :src="food.image" mode="aspectFill" />
 						<view class="food-info">
@@ -49,11 +49,11 @@
 	<!-- 底部购物车 -->
 	<view class="bottom-cart-wrapper">
 		<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee" @add='onAdd'
-			@sub='onSub' @pay="onPay" @clear="onClear" />
+			@sub='onSub' @pay="onPay" @clear="onClear" @click-food="onClickFood" />
 	</view>
 
 	<!-- 食物详情页 -->
-	<food-detail ref="foodDetail" :visible="foodDetailShow" :currentFood="currentFood" @hide='hideFoodDetail'
+	<food-detail ref="foodDetail" :visible="foodDetailShow" :current-food="currentFood" @hide='hideFoodDetail'
 		@add="onAdd" />
 
 </template>
@@ -136,7 +136,7 @@
 			switchCategory(categoryName) {
 				this.currentCategory = categoryName;
 			},
-			clickFood(food) {
+			onClickFood(food) {
 				// 打开菜品详情页
 				this.currentFood = food;
 				this.foodDetailShow = true;

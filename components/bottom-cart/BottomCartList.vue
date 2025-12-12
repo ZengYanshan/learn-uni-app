@@ -9,7 +9,7 @@
 					</view>
 					<!-- 食物列表 -->
 					<scroll-view class="list-content" scroll-y ref="listContent" :style="{maxHeight: '400rpx'}">
-						<view v-for="(food, index) in selectedFoods" :key="index" class="food">
+						<view v-for="(food, index) in selectedFoods" :key="index" @click="clickFood(food)" class="food">
 							<image class="img" :src="food.image" mode="aspectFill" />
 							<text class="name">{{food.name}}</text>
 							<view class="price">
@@ -43,6 +43,9 @@
 			}
 		},
 		methods: {
+			clickFood(food) {
+				this.$emit('click-food', food);
+			},
 			onAdd(food) {
 				this.$emit('add', food);
 			},
@@ -93,6 +96,7 @@
 		/* bottom 与 FoodList.vue 中保持一致 */
 		bottom: 100rpx;
 		background: white;
+		border-radius: 10rpx;
 		
 	}
 	/* 购物车列表出现、消失动画 */

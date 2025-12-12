@@ -89,6 +89,7 @@
 		right: 0;
 		bottom: 0;
 		background: white;
+		border-radius: 10rpx;
 	}
 
 	/* 购物车列表出现、消失动画 */
