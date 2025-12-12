@@ -29,14 +29,6 @@
         "navigationStyle": "custom" // 隐藏顶部标题栏
       }
     },
-    {
-      "path": "pages/shop/FoodDetailPage",
-      "style": {
-        "navigationBarTitleText": "菜品详情",
-        "navigationBarBackgroundColor": "#FFFFFF",
-        "navigationStyle": "custom" // 隐藏顶部标题栏
-      }
-    },
     
     // 购物车与订单模块
     {

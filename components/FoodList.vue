@@ -48,8 +48,8 @@
 	</view>
 	<!-- 底部购物车 -->
 	<view class="bottom-cart-wrapper">
-		<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee" @add='onAdd'
-			@sub='onSub' @pay="onPay" @clear="onClear" @click-food="onClickFood" />
+		<bottom-cart ref="bottomCart" :selected-foods="selectedFoodsInShop" :delivery-fee="data.shop.deliveryFee"
+			@add='onAdd' @sub='onSub' @pay="onPay" @clear="onClear" @click-food="onClickFood" />
 	</view>
 
 	<!-- 食物详情页 -->
@@ -120,16 +120,30 @@
 				console.log("foodCategorizedInShop = ", categories);
 				return categories;
 			},
-			selectedFoods() {
-				let _selectedFoods = this.$store.state.cart.cartData.map(item => {
-					const food = FOODS.find(f => f.id === item.foodId);
-					return {
-						...food,
-						count: item.count
-					};
-				});
-				console.log("selectedFoods = ", _selectedFoods);
-				return _selectedFoods;
+			selectedFoodsInShop() {
+				// 1. 提取当前shop的所有有效foodId
+				const foodIdsInShop = new Set();
+				if (this.data.shop?.menu) {
+					this.data.shop.menu.forEach(category => {
+						category.items.forEach(item => {
+							foodIdsInShop.add(item.foodId);
+						});
+					});
+				}
+
+				// 2. 过滤购物车数据：仅保留属于当前shop的food
+				return this.$store.state.cart.cartData
+					.map(item => {
+						const food = FOODS.find(f => f.id === item.foodId);
+						// 确保food存在且属于当前shop
+						return food && foodIdsInShop.has(food.id) ?
+							{
+								...food,
+								count: item.count
+							} :
+							null;
+					})
+					.filter(Boolean); // 移除null值
 			},
 		},
 		methods: {
