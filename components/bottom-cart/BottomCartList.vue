@@ -96,7 +96,8 @@
 		/* bottom 与 FoodList.vue 中保持一致 */
 		bottom: 100rpx;
 		background: white;
-		border-radius: 10rpx;
+		border-top-left-radius: 10px;    /* 左上角圆角 */
+ 		border-top-right-radius: 10px;   /* 右上角圆角 */
 		
 	}
 	/* 购物车列表出现、消失动画 */

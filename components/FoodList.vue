@@ -171,8 +171,9 @@
 				for (let i = 0; i < this.categoryPositions.length; i++) {
 					const start = this.categoryPositions[i];
 					const end = this.categoryPositions[i + 1] || Number.MAX_SAFE_INTEGER;
-					// console.log("categoryPositions = ", this.categoryPositions);
+					console.log(start, scrollTop, end, this.categoryPositions);
 					if (scrollTop >= start && scrollTop < end) {
+
 						this.currentCategory = this.foodsCategorizedInShop[i].name;
 						break;
 					}
@@ -190,6 +191,13 @@
 							this.categoryPositions[index] = res.top;
 						}
 					}).exec();
+				});
+				// 遍历 categoryPositions，每一项都减去 categoryPositions[0]
+				this.$nextTick(() => {
+					if (this.categoryPositions.length > 0) {
+						const basePosition = this.categoryPositions[0];
+						this.categoryPositions = this.categoryPositions.map(pos => pos - basePosition);
+					}
 				});
 			},
 
