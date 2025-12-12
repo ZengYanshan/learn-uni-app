@@ -16,9 +16,21 @@ const SHOPS = [
 			]
 		},
 		{
-			"category": "其他",
+			"category": "分类1",
 			"items": [
-				{"foodId": 103}
+				{"foodId": 103},
+				{"foodId": 104},
+				{"foodId": 105},
+				{"foodId": 106},
+				{"foodId": 107}
+			]
+		},
+		{
+			"category": "分类2",
+			"items": [
+				{"foodId": 108},
+				{"foodId": 109},
+				{"foodId": 110}
 			]
 		}
     ]
