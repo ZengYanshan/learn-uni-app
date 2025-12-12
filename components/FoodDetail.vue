@@ -26,6 +26,11 @@
 							<text class="info-text">{{currentFood.description}}</text>
 						</view>
 					</scroll-view>
+
+					<!-- 加入购物车按钮 -->
+					<view class="add-to-cart-button" @click="add">
+						加入购物车
+					</view>
 				</view>
 			</transition>
 		</view>
@@ -87,9 +92,13 @@
 		position: absolute;
 		left: 0;
 		right: 0;
-		bottom: 0;
+		/* bottom 与 .add-to-cart-button 高度保持一致 */
+		bottom: 100rpx;
 		background: white;
-		border-radius: 10rpx;
+		border-top-left-radius: 10px;
+		/* 左上角圆角 */
+		border-top-right-radius: 10px;
+		/* 右上角圆角 */
 	}
 
 	/* 购物车列表出现、消失动画 */
@@ -109,7 +118,7 @@
 	.popup-content.move-enter-active,
 	.popup-content.move-leave-active {
 		transition: all 0.3s ease-in-out;
-		
+
 	}
 
 	.food-detail-wrapper {
@@ -168,5 +177,19 @@
 		font-size: 32rpx;
 		font-weight: bold;
 		color: #333;
+	}
+
+	.add-to-cart-button {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100rpx;
+		background-color: #ff5722;
+		color: #fff;
+		text-align: center;
+		line-height: 100rpx;
+		font-size: 32rpx;
+		font-weight: bold;
 	}
 </style>
