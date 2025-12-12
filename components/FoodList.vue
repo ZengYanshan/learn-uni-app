@@ -6,6 +6,9 @@
 				:class="{ 'active': currentCategory === category.name }" @click="switchCategory(category.name)">
 				<text>{{ category.name }}</text>
 				<view v-if="currentCategory === category.name" class="active-indicator"></view>
+				<view v-if="category.count > 0" class="category-count">
+					<bubble :num='category.count' />
+				</view>
 			</view>
 		</scroll-view>
 
@@ -41,17 +44,24 @@
 				</view>
 			</view>
 		</scroll-view>
-		<!-- 底部购物车 -->
-		<view class="bottom-cart-wrapper">
-			<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee"
-				@add='onAdd' @sub='onSub' @pay="onPay" @clear="onClear" />
-		</view>
+
 	</view>
+	<!-- 底部购物车 -->
+	<view class="bottom-cart-wrapper">
+		<bottom-cart ref="bottomCart" :selected-foods="selectedFoods" :delivery-fee="data.shop.deliveryFee" @add='onAdd'
+			@sub='onSub' @pay="onPay" @clear="onClear" />
+	</view>
+
+	<!-- 食物详情页 -->
+	<food-detail ref="foodDetail" :visible="foodDetailShow" :currentFood="currentFood" @hide='hideFoodDetail'
+		@add="onAdd" />
+
 </template>
 
 <script>
 	import BottomCart from '@/components/bottom-cart/BottomCart.vue';
 	import FoodCountController from '@/components/FoodCountController.vue';
+	import FoodDetail from '@/components/FoodDetail.vue';
 	import Bubble from '@/components/Bubble.vue';
 	import FOODS from '@/static/data/foods.js';
 
@@ -66,7 +76,8 @@
 		data() {
 			return {
 				currentCategory: '',
-				// foodsCategorizedInShop: [],
+				currentFood: {},
+				foodDetailShow: false
 			};
 		},
 		computed: {
@@ -95,25 +106,21 @@
 								}
 							});
 						}
+						const selectedFoodCount = foods.reduce((total, food) => {
+							return total + (food.count > 0 ? 1 : 0); // 统计有数量的食物项
+						}, 0);
+
 						categories.push({
 							name: category.category,
+							count: selectedFoodCount,
 							foods
 						});
 					});
 				}
+				console.log("foodCategorizedInShop = ", categories);
 				return categories;
 			},
 			selectedFoods() {
-				// let _selectedFoods = [];
-				// this.foodsCategorizedInShop.forEach((category) => {
-				// 	category.foods.forEach((food) => {
-				// 		if (food.count) {
-				// 			_selectedFoods.push(food);
-				// 		}
-				// 	})
-				// })
-				// return _selectedFoods;
-				// console.log("update selectedFoods");
 				let _selectedFoods = this.$store.state.cart.cartData.map(item => {
 					const food = FOODS.find(f => f.id === item.foodId);
 					return {
@@ -125,62 +132,17 @@
 				return _selectedFoods;
 			},
 		},
-		// watch: {
-		// 	// 监听data变化，当shop数据就绪时初始化
-		// 	'data.shop': {
-		// 		handler(newVal) {
-		// 			if (newVal && newVal.menu) {
-		// 				console.log("watched");
-		// 				this.initializeFoodData();
-		// 			}
-		// 		},
-		// 		immediate: true, // 立即执行一次
-		// 		deep: true
-		// 	}
-		// },
 		methods: {
-			// async initializeFoodData() {
-			// 	console.log('initializeFoodData()');
-
-			// 	const categoryMap = new Map();
-			// 	// 遍历
-			// 	this.data.shop.menu.forEach(category => {
-			// 		const foods = [];
-
-			// 		// 添加安全检查
-			// 		if (category.items && Array.isArray(category.items)) {
-			// 			category.items.forEach(item => {
-			// 				const food = FOODS.find(f => f.id === item.foodId);
-			// 				if (food) {
-			// 					foods.push({
-			// 						...food,
-			// 						count: 0,
-			// 						category: category.category
-			// 					});
-			// 				}
-			// 			});
-			// 		}
-
-			// 		categoryMap.set(category.category, {
-			// 			name: category.category,
-			// 			foods
-			// 		});
-			// 	});
-
-			// 	this.foodsCategorizedInShop = Array.from(categoryMap.values());
-			// 	if (this.foodsCategorizedInShop.length > 0) {
-			// 		this.currentCategory = this.foodsCategorizedInShop[0].name;
-			// 	}
-			// 	console.log("foodsCategorizedInShop = ", this.foodsCategorizedInShop);
-			// },
 			switchCategory(categoryName) {
 				this.currentCategory = categoryName;
 			},
 			clickFood(food) {
-				// 跳转到菜品详情页
-				uni.navigateTo({
-					url: `/pages/shop/FoodDetailPage?id=${food.id}`
-				});
+				// 打开菜品详情页
+				this.currentFood = food;
+				this.foodDetailShow = true;
+			},
+			hideFoodDetail() {
+				this.foodDetailShow = false;
 			},
 			async onAdd(food) {
 				console.log(food);
@@ -206,7 +168,8 @@
 		components: {
 			Bubble,
 			BottomCart,
-			FoodCountController
+			FoodCountController,
+			FoodDetail
 		}
 	};
 </script>
@@ -235,6 +198,12 @@
 		color: #FF5A5F;
 		font-weight: bold;
 		background: #FFF1F0;
+	}
+
+	.category-count {
+		position: absolute;
+		right: 0;
+		top: 0;
 	}
 
 	.active-indicator {
@@ -320,13 +289,7 @@
 		margin-right: 10rpx;
 	}
 
-	.old {
-		font-size: 24rpx;
-		color: #999;
-		text-decoration: line-through;
-	}
-
-	.food-count--controller-wrapper {
+	.food-count-controller-wrapper {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;

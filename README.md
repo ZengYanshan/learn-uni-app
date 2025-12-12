@@ -48,9 +48,6 @@ src/
 │   │   ├── user.js         # 用户信息
 │   │   ├── cart.js         # 购物车数据
 │   │   └── order.js        # 订单数据
-├── utils/                  # 工具函数
-│   ├── storage.js          # 本地存储封装（localStorage/uni.setStorage）
-│   └── filter.js           # 过滤器（如价格格式化）
 ├── App.vue                 # 应用根组件
 └── main.js                 # 应用入口文件
 ```

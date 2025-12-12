@@ -65,7 +65,7 @@
 			this.loadShopData(options.id);
 		},
 		methods: {
-			async loadShopData(shopId) {
+			loadShopData(shopId) {
 				// try {
 				// 	// 加载商家数据
 				// 	const shopRes = await uni.request({

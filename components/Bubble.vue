@@ -19,15 +19,15 @@
 <style scoped>
 	.bubble {
 		display: inline-block;
-		padding: 0 10rpx;
-		min-width: 40rpx;
-		height: 40rpx;
-		line-height: 40rpx;
+		padding: 0 1rpx;
+		width: 32rpx;
+		height: 32rpx;
+		line-height: 32rpx;
 		text-align: center;
-		border-radius: 40rpx;
+		border-radius: 32rpx;
 		font-family: sans-serif;
 		font-weight: bold;
-		font-size: 24rpx;
+		font-size: 20rpx;
 		color: white;
 		background: linear-gradient(to right, #ff9900, #ff3300);
 		box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);

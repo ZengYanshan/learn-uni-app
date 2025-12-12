@@ -95,7 +95,6 @@
 		background: white;
 	}
 	/* 购物车列表出现、消失动画 */
-	/* 修正后的动画配置 */
 	.popup-content.move-enter-from,
 	.popup-content.move-leave-to {
 	  transform: translate3d(0, 100%, 0); /* 进入前/离开后状态 */

@@ -5,15 +5,15 @@
 		<view class="content" @click="toggleList">
 			<!-- 左栏 -->
 			<view class="content-left">
-				
+
 				<view class="logo-wrapper">
 					<!-- 购物车图标 -->
 					<view class="logo" :class="{'highlight': totalCount > 0}">
-						<image class="icon-bottom_cart" :class="{'highlight': totalCount > 0}"
+						<image class="bottom-cart-icon" :class="{'highlight': totalCount > 0}"
 							src="/static/images/icon-cart.png" />
 					</view>
 					<!-- 总数 -->
-					<view class="num" v-show="totalCount > 0">
+					<view class="bottom-cart-count" v-show="totalCount > 0">
 						<bubble :num='totalCount' />
 					</view>
 				</view>
@@ -43,8 +43,8 @@
 			</view>
 		</view>
 
-		<bottom-cart-list :visible='listShow' :selected-foods='selectedFoods' @hide='hideList'
-			@add="onAdd" @sub='onSub' @clear="onClear" />
+		<bottom-cart-list :visible='listShow' :selected-foods='selectedFoods' @hide='hideList' @add="onAdd" @sub='onSub'
+			@clear="onClear" />
 
 	</view>
 </template>
@@ -226,7 +226,7 @@
 		background: #2d343c;
 		color: rgba(255, 255, 255, 0.4);
 		font-size: 0;
-		
+
 		position: relative;
 		z-index: 100;
 	}
@@ -239,6 +239,7 @@
 
 	.logo-wrapper {
 		position: relative;
+		top: -22rpx;
 		margin: 0 24rpx;
 		padding: 12rpx;
 		width: 112rpx;
@@ -249,8 +250,9 @@
 	}
 
 	.logo {
-		width: 100%;
-		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		border-radius: 50%;
 		text-align: center;
 		background: #2b333b;
@@ -260,30 +262,21 @@
 		background: #00a0dc;
 	}
 
-	.icon-bottom_cart {
+	.bottom-cart-icon {
 		display: block;
 		width: 44rpx;
 		height: 44rpx;
 		margin: 22rpx auto;
 	}
 
-	.icon-bottom_cart.highlight {
+	.bottom-cart-icon.highlight {
 		color: #fff;
 	}
 
-	.num {
+	.bottom-cart-count {
 		position: absolute;
-		top: -10rpx;
-		right: 0;
-		background: #f01414;
-		border-radius: 30rpx;
-		padding: 0 16rpx;
-		min-width: 40rpx;
-		height: 40rpx;
-		line-height: 40rpx;
-		text-align: center;
-		font-size: 24rpx;
-		color: #fff;
+		right: 2rpx;
+		top: 2rpx;
 	}
 
 	.price {
