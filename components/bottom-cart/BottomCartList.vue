@@ -93,6 +93,7 @@
 		/* bottom 与 FoodList.vue 中保持一致 */
 		bottom: 100rpx;
 		background: white;
+		
 	}
 	/* 购物车列表出现、消失动画 */
 	.popup-content.move-enter-from,
@@ -130,6 +131,7 @@
 	.list-content {
 		padding: 0 18rpx;
 		overflow-y: auto;
+		box-sizing: border-box; /* DEBUG 防止右溢出 */
 	}
 
 	.list-content .food {
@@ -163,7 +165,7 @@
 
 	.list-content .food .food-count-controller-wrapper {
 		position: absolute;
-		right: 30rpx;
+		right: 0rpx;
 		bottom: 12rpx;
 	}
 </style>

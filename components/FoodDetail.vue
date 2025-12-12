@@ -108,13 +108,13 @@
 	.popup-content.move-enter-active,
 	.popup-content.move-leave-active {
 		transition: all 0.3s ease-in-out;
-		/* 统一过渡配置 */
+		
 	}
 
 	.food-detail-wrapper {
 		flex: 1;
 		padding: 10rpx;
-		/* overflow: auto; */
+		box-sizing: border-box; /* DEBUG 防止右溢出 */
 	}
 
 	.image-section {
