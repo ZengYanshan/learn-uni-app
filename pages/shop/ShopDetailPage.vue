@@ -7,8 +7,12 @@
 		<view class="main-container">
 			<shop-header :shop="shop" />
 
-			<view class="tab-wrapper">
+			<!-- <view class="tab-wrapper">
 				<tab :tabs="tabs" />
+			</view> -->
+			
+			<view class="food-list-wrapper">
+				<food-list :data="{shop: shop}"/>
 			</view>
 		</view>
 	</view>
@@ -16,7 +20,7 @@
 
 <script>
 	import ShopHeader from '@/components/ShopHeader.vue';
-	import Tab from '@/components/Tab.vue';
+	// import Tab from '@/components/Tab.vue';
 	import FoodList from '@/components/FoodList.vue';
 	import CommentList from '@/components/CommentList.vue';
 	import SHOPS from '@/static/data/shops.js';
@@ -24,22 +28,16 @@
 	export default {
 		components: {
 			ShopHeader,
-			Tab
+			FoodList
+			// Tab
 		},
 		data() {
 			return {
 				shop: {},
-				// isShopDataLoaded: false
 			};
 		},
 		computed: {
 			tabs() {
-				// 只有shop数据加载完成时才传递组件
-				// if (!this.isShopLoaded) {
-				// 	console.log("shop数据未加载，传空值");
-				// 	return [];
-				// }
-				
 				if (this.shop) {
 					console.log("shop数据已加载，可传正确tab");
 				}
@@ -125,5 +123,14 @@
 		background: white;
 		/* 		border-top-left-radius: 30rpx;
 		border-top-right-radius: 30rpx; */
+	}
+	
+	.food-list-wrapper {
+		position: fixed;
+		top: 256rpx;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: white;
 	}
 </style>

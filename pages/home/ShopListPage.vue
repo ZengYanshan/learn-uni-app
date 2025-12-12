@@ -4,10 +4,10 @@
     <view class="custom-navbar">
       <image src="/static/images/icon-back.png" class="back-icon" @click="goBack" />
       <text class="page-title">商家列表</text>
-      <view class="filter-btn" @click="toggleFilter">
+      <!-- <view class="filter-btn" @click="toggleFilter">
         <text>筛选</text>
         <image src="/static/images/icon-filter.png" class="filter-icon" />
-      </view>
+      </view> -->
     </view>
 
     <!-- 搜索栏 -->
@@ -18,10 +18,10 @@
         v-model="searchKey" 
         @confirm="searchShops"
       />
-      <image src="/static/images/icon-search.png" class="search-icon" />
+      <!-- <image src="/static/images/icon-search.png" class="search-icon" /> -->
     </view>
 
-    <!-- 筛选条件 -->
+    <!-- 筛选条件 
     <view class="filter-bar">
       <view 
         class="filter-item" 
@@ -32,7 +32,7 @@
         <text class="filter-text">{{ filter.label }}</text>
         <text v-if="currentFilter === filter.type" class="active-indicator">✓</text>
       </view>
-    </view>
+    </view>-->
 
     <!-- 商家列表 -->
     <scroll-view class="shop-list" scroll-y>
