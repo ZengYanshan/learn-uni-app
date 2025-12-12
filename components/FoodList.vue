@@ -3,7 +3,7 @@
 		<!-- 左侧分类导航 -->
 		<scroll-view class="category-nav" scroll-y>
 			<view v-for="(category, index) in foodsCategorizedInShop" :key="index" class="category-item"
-				:class="{ 'active': currentCategory === category.name }" @click="switchCategory(category.name)">
+				:class="{ 'active': currentCategory === category.name }" @click="switchCategory(index)">
 				<text>{{ category.name }}</text>
 				<view v-if="currentCategory === category.name" class="active-indicator"></view>
 				<view v-if="category.count > 0" class="category-count">
@@ -13,10 +13,12 @@
 		</scroll-view>
 
 		<!-- 右侧商品列表 -->
-		<scroll-view class="food-container" scroll-y>
-			<view v-for="(category, idx) in foodsCategorizedInShop" :key="idx">
+		<scroll-view class="food-container" scroll-y scroll-with-animation :ref="foodContainer"
+			:scroll-into-view="scrollIntoView" @scroll="handleScroll">
+			<view v-for="(category, idx) in foodsCategorizedInShop" :key="idx" :ref="'category-' + idx"
+				:id="'category-' + idx">
 				<!-- 分类名称 -->
-				<view class="category-title">
+				<view class="category-title" :id="'title-' + idx">
 					<text>{{ category.name }}</text>
 				</view>
 
@@ -75,10 +77,18 @@
 		},
 		data() {
 			return {
-				currentCategory: '',
+				currentCategory: '', // 当前高亮的分类
+				categoryPositions: [], // 存储各分类的顶部位置
+				scrollIntoView: '', // 用于 scroll-into-view 的 id
+				scrollTimeout: null,
 				currentFood: {},
 				foodDetailShow: false
 			};
+		},
+		mounted() {
+			this.$nextTick(() => {
+				this.calculateCategoryPositions();
+			});
 		},
 		computed: {
 			foodsCategorizedInShop() {
@@ -136,20 +146,60 @@
 					.map(item => {
 						const food = FOODS.find(f => f.id === item.foodId);
 						// 确保food存在且属于当前shop
-						return food && foodIdsInShop.has(food.id) ?
-							{
+						return food && foodIdsInShop.has(food.id) ? {
 								...food,
 								count: item.count
 							} :
 							null;
 					})
 					.filter(Boolean); // 移除null值
+			}
+		},
+		watch: {
+			foodsCategorizedInShop: {
+				handler() {
+					this.calculateCategoryPositions();
+				},
+				immediate: true,
 			},
 		},
 		methods: {
-			switchCategory(categoryName) {
-				this.currentCategory = categoryName;
+			// 滚动事件处理
+			handleScroll(e) {
+				// console.log("handleScroll()", e);
+				const scrollTop = e.detail.scrollTop;
+				for (let i = 0; i < this.categoryPositions.length; i++) {
+					const start = this.categoryPositions[i];
+					const end = this.categoryPositions[i + 1] || Number.MAX_SAFE_INTEGER;
+					// console.log("categoryPositions = ", this.categoryPositions);
+					if (scrollTop >= start && scrollTop < end) {
+						this.currentCategory = this.foodsCategorizedInShop[i].name;
+						break;
+					}
+				}
 			},
+
+			// 计算每个分类的位置信息
+			calculateCategoryPositions() {
+				const query = uni.createSelectorQuery().in(this);
+				this.categoryPositions = [];
+
+				this.foodsCategorizedInShop.forEach((_, index) => {
+					query.select('#title-' + index).boundingClientRect((res) => {
+						if (res) {
+							this.categoryPositions[index] = res.top;
+						}
+					}).exec();
+				});
+			},
+
+
+			// 点击左侧分类导航
+			switchCategory(index) {
+				this.currentCategory = this.foodsCategorizedInShop[index].name;
+				this.scrollIntoView = `category-${index}`; // 设置 scroll-into-view 的目标 id
+			},
+
 			onClickFood(food) {
 				// 打开菜品详情页
 				this.currentFood = food;
