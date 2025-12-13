@@ -33,7 +33,7 @@
 		</view>
 
 		<view direction="horizontal" class="signature-foods-wrapper">
-			<view v-for="signatureFood in signatureFoods" @click="onClickFood" class="food-card">
+			<view v-for="signatureFood in signatureFoods" @click="onClickFood(signatureFood)" class="food-card">
 				<view class="food-image-wrapper">
 					<image :src="signatureFood.image" class="food-image" mode="aspectFill" />
 				</view>
@@ -78,6 +78,7 @@
 					shopId: this.shop.id
 				};
 				this.$emit('click-shop', options);
+				console.log('click-shop', options);
 			},
 			onClickFood(food) {
 				let options = {
@@ -85,6 +86,7 @@
 					foodId: food.id
 				};
 				this.$emit('click-food', options);
+				console.log('click-food', options);
 			},
 			getSignatureFoods(shop) {
 				const signatureFoodIds = this.getSignatureFoodIds(shop);

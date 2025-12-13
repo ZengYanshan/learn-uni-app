@@ -12,7 +12,8 @@
 			</view> -->
 			
 			<view class="food-list-wrapper">
-				<food-list :data="{shop: shop}"/>
+				<!-- <food-list :data="{shop: shop}"/> -->
+				<food-list ref="foodList" :shop="shop" />
 			</view>
 		</view>
 	</view>
@@ -24,6 +25,7 @@
 	import FoodList from '@/components/FoodList.vue';
 	import CommentList from '@/components/CommentList.vue';
 	import SHOPS from '@/static/data/shops.js';
+	import FOODS from '@/static/data/foods.js';
 
 	export default {
 		components: {
@@ -33,7 +35,7 @@
 		},
 		data() {
 			return {
-				shop: {},
+				shop: {}
 			};
 		},
 		computed: {
@@ -60,16 +62,16 @@
 			},
 		},
 		onLoad(options) {
-			this.loadShopData(options.shopId);
+			this.shop = SHOPS.find(s => s.id == options.shopId) || {};
 			if (options.foodId) {
 				// TODO 打开食物页
+				let parentSelectedFood = FOODS.find(f => f.id == options.foodId) || {};
+				this.$nextTick(() => {
+					this.$refs.foodList.showFoodDetail(parentSelectedFood);
+				});
 			}
 		},
 		methods: {
-			loadShopData(shopId) {
-				this.shop = SHOPS.find(s => s.id == shopId) || {};
-			},
-
 			goBack() {
 				uni.navigateBack();
 			}

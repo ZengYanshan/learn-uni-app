@@ -50,7 +50,7 @@
 	</view>
 	<!-- 底部购物车 -->
 	<view class="bottom-cart-wrapper">
-		<bottom-cart ref="bottomCart" :selected-foods="selectedFoodsInShop" :delivery-fee="data.shop.deliveryFee"
+		<bottom-cart ref="bottomCart" :selected-foods="selectedFoodsInShop" :delivery-fee="shop.deliveryFee"
 			@add='onAdd' @sub='onSub' @pay="onPay" @clear="onClear" @click-food="onClickFood" />
 	</view>
 
@@ -70,9 +70,17 @@
 	export default {
 		name: 'FoodList',
 		props: {
-			data: {
+			// data: {
+			// 	type: Object,
+			// 	default: () => ({})
+			// }
+			shop: {
 				type: Object,
-				default: () => ({})
+				default: {}
+			},
+			parentSelectedFood: {
+				type: Object,
+				default: {}
 			}
 		},
 		data() {
@@ -100,8 +108,8 @@
 
 				// 构建分类数据结构
 				const categories = [];
-				if (this.data.shop?.menu) {
-					this.data.shop.menu.forEach(category => {
+				if (this.shop?.menu) {
+					this.shop.menu.forEach(category => {
 						const foods = [];
 						if (category.items && Array.isArray(category.items)) {
 							category.items.forEach(item => {
@@ -117,7 +125,7 @@
 							});
 						}
 						const selectedFoodCount = foods.reduce((total, food) => {
-							return total + (food.count > 0 ? 1 : 0); // 统计有数量的食物项
+							return total + (food.count > 0 ? food.count : 0); // 统计已加购食物数量
 						}, 0);
 
 						categories.push({
@@ -133,8 +141,8 @@
 			selectedFoodsInShop() {
 				// 1. 提取当前shop的所有有效foodId
 				const foodIdsInShop = new Set();
-				if (this.data.shop?.menu) {
-					this.data.shop.menu.forEach(category => {
+				if (this.shop?.menu) {
+					this.shop.menu.forEach(category => {
 						category.items.forEach(item => {
 							foodIdsInShop.add(item.foodId);
 						});
@@ -161,7 +169,7 @@
 					this.calculateCategoryPositions();
 				},
 				immediate: true,
-			},
+			}
 		},
 		methods: {
 			// 滚动事件处理
@@ -209,6 +217,9 @@
 			},
 
 			onClickFood(food) {
+				this.showFoodDetail(food);
+			},
+			showFoodDetail(food) {
 				// 打开菜品详情页
 				this.currentFood = food;
 				this.foodDetailShow = true;
