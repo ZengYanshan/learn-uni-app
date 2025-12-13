@@ -7,7 +7,7 @@
 					<scroll-view scroll-y class="food-detail-wrapper">
 						<!-- 食物大图 -->
 						<view class="image-section">
-							<image class="food-image" :src="currentFood.image" mode="widthFix"></image>
+							<image class="food-image" :src="currentFood.image" mode="aspectFill"></image>
 						</view>
 
 						<!-- 基础信息 -->

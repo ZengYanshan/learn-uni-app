@@ -33,7 +33,7 @@
 
 		<scroll-view class="shop-list" scroll-y>
 			<block v-for="shop in shops" :key="shop.id">
-				<ShopCard :shop="shop" @click="gotoShopDetail(shop.id)" />
+				<ShopCard :shop="shop" @click-shop="gotoShopDetail" @click-food="gotoShopDetail" />
 			</block>
 		</scroll-view>
 	</view>
@@ -58,22 +58,22 @@
 						image: '/static/images/banner2.jpg'
 					}
 				],
-				categories: [{
-						id: 1,
-						name: '美食',
-						icon: '/static/images/cat-food.png'
-					},
-					{
-						id: 2,
-						name: '商超',
-						icon: '/static/images/cat-market.png'
-					},
-					{
-						id: 3,
-						name: '甜品',
-						icon: '/static/images/cat-dessert.png'
-					}
-				],
+				// categories: [{
+				// 		id: 1,
+				// 		name: '美食',
+				// 		icon: '/static/images/cat-food.png'
+				// 	},
+				// 	{
+				// 		id: 2,
+				// 		name: '商超',
+				// 		icon: '/static/images/cat-market.png'
+				// 	},
+				// 	{
+				// 		id: 3,
+				// 		name: '甜品',
+				// 		icon: '/static/images/cat-dessert.png'
+				// 	}
+				// ],
 				shops: [] // 商家数据
 			};
 		},
@@ -93,9 +93,13 @@
 				});
 			},
 			// 跳转到商家详情页
-			gotoShopDetail(shopId) {
+			gotoShopDetail(options) {
+				let _url = `/pages/shop/ShopDetailPage?shopId=${options.shopId}`;
+				if (options.foodId) {
+					_url += `&foodId=${options.foodId}`;
+				}
 				uni.navigateTo({
-					url: `/pages/shop/ShopDetailPage?id=${shopId}`
+					url: _url
 				});
 			}
 		}

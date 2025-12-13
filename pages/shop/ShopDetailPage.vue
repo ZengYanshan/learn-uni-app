@@ -60,22 +60,13 @@
 			},
 		},
 		onLoad(options) {
-			this.loadShopData(options.id);
+			this.loadShopData(options.shopId);
+			if (options.foodId) {
+				// TODO 打开食物页
+			}
 		},
 		methods: {
 			loadShopData(shopId) {
-				// try {
-				// 	// 加载商家数据
-				// 	const shopRes = await uni.request({
-				// 		url: '/static/data/shops.json',
-				// 		dataType: 'json'
-				// 	});
-				// 	this.shop = shopRes.data.find(s => s.id == shopId) || {};
-				// 	// this.isShopDataLoaded = true;
-				// 	console.log("加载shop数据成功");
-				// } catch (e) {
-				// 	console.error('加载数据失败', e);
-				// }
 				this.shop = SHOPS.find(s => s.id == shopId) || {};
 			},
 
