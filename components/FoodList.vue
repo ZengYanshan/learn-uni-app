@@ -119,7 +119,7 @@
 										...food,
 										// 从购物车映射中获取数量，不存在则为0
 										count: cartMap.get(food.id) || 0,
-										category: category.category
+										categorcurrentFoody: category.category
 									});
 								}
 							});
@@ -232,7 +232,7 @@
 				await this.$store.dispatch('cart/addFood', {
 					foodId: food.id
 				});
-				// this.$refs.bottomCart.drop(target);
+				this.hideFoodDetail();
 			},
 			async onSub(food) {
 				await this.$store.dispatch('cart/subFood', {
