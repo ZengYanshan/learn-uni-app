@@ -238,7 +238,6 @@
 				await this.$store.dispatch('cart/subFood', {
 					foodId: food.id
 				});
-				// this.$refs.bottomCart.drop(target);
 			},
 			onPay(totalPrice) {
 				// TODO 处理支付逻辑

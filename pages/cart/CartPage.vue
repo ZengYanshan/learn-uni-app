@@ -12,7 +12,7 @@
 			<!-- 商店分组 -->
 			<view v-for="(shopGroup, index) in groupedCart" :key="index" class="shop-group">
 				<!-- 商店头部 -->
-				<view class="shop-header">
+				<view class="shop-header" @click="goToShopDetail(shopGroup.shop.id)">
 					<image :src="shopGroup.shop.image" class="shop-image" />
 					<text class="shop-name">{{ shopGroup.shop.name }}</text>
 					<text class="delivery-fee">配送费: ¥{{ shopGroup.shop.deliveryFee }}</text>
@@ -20,7 +20,7 @@
 
 				<!-- 食物列表 -->
 				<view class="food-list">
-					<view v-for="food in shopGroup.foods" :key="food.id" class="food-item">
+					<view v-for="food in shopGroup.foods" :key="food.id" class="food-item" @click="goToFoodDetail(shopGroup.shop.id, food.id)">
 						<image :src="food.image" class="food-image" mode="aspectFill" />
 						<view class="food-info">
 							<text class="food-name">{{ food.name }}</text>
@@ -28,7 +28,7 @@
 							<!-- <text class="food-desc">{{ food.description }}</text> -->
 						</view>
 						<view class="food-count">
-							<food-count-controller :food="food" @add="addFood(food)" @sub="subFood(food)" />
+							<food-count-controller :food="food" @add='onAdd' @sub='onSub' />
 						</view>
 						<!-- <view class="delete-btn" @click="removeFood(food)">删除</view> -->
 					</view>
@@ -66,8 +66,8 @@
 							cat.items.some(i => i.foodId === item.foodId)
 						)
 					);
-					
-					
+
+
 					if (shop) {
 						if (!shopMap.has(shop.id)) {
 							shopMap.set(shop.id, {
@@ -83,7 +83,7 @@
 						});
 					}
 				});
-				
+
 				let _groupedCart = Array.from(shopMap.values());
 				console.log("groupedCart = ", _groupedCart);
 				return _groupedCart;
@@ -100,7 +100,28 @@
 			}
 		},
 		methods: {
-
+			goToShopDetail(shopId) {
+				let _url = `/pages/shop/ShopDetailPage?shopId=${shopId}`;
+				uni.navigateTo({
+					url: _url
+				});
+			},
+			goToFoodDetail(shopId, foodId) {
+				let _url = `/pages/shop/ShopDetailPage?shopId=${shopId}&foodId=${foodId}`;
+				uni.navigateTo({
+					url: _url
+				});
+			},
+			async onAdd(food) {
+				await this.$store.dispatch('cart/addFood', {
+					foodId: food.id
+				});
+			},
+			async onSub(food) {
+				await this.$store.dispatch('cart/subFood', {
+					foodId: food.id
+				});
+			},
 			// 删除食物
 			removeFood(food) {
 				this.subFood({
@@ -129,7 +150,7 @@
 		display: flex;
 		flex-direction: column;
 		background-color: #f5f5f5;
-		
+
 		padding: 20rpx;
 	}
 
