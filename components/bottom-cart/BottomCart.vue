@@ -238,6 +238,8 @@
 
 	.logo {
 		display: flex;
+		width: 100%;
+		height: 100%;
 		align-items: center;
 		justify-content: center;
 		border-radius: 50%;
@@ -299,8 +301,9 @@
 	}
 
 	.pay {
-		height: 96rpx;
-		line-height: 96rpx;
+		width: 100%;
+		height: 100%;
+		line-height: 100rpx;
 		text-align: center;
 		font-weight: 700;
 		font-size: 28rpx;

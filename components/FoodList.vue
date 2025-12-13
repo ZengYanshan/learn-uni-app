@@ -28,7 +28,7 @@
 						<image class="food-image" :src="food.image" mode="aspectFill" />
 						<view class="food-info">
 							<text class="name">{{ food.name }}</text>
-							<text class="desc">{{ food.description }}</text>
+							<!-- <text class="desc">{{ food.description }}</text> -->
 							<!-- 							<view class="extra">
 								<text class="count">月售{{ food.sellCount }}份</text>
 								<text>好评率{{ food.rating }}%</text>
@@ -270,7 +270,9 @@
 
 	.category-item {
 		position: relative;
-		padding: 30rpx 20rpx;
+		width: 100%;
+		margin: 0;
+		padding: 30rpx 0rpx;
 		font-size: 26rpx;
 		text-align: center;
 		border-bottom: 1rpx solid #eee;
@@ -321,51 +323,35 @@
 		box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 	}
 
-	.food-header {
+	.food-item .food-header {
 		display: flex;
 		align-items: center;
 	}
 
-	.food-image {
+	.food-item .food-image {
 		width: 160rpx;
 		height: 160rpx;
 		margin-right: 20rpx;
 		border-radius: 8rpx;
 	}
 
-	.food-info {
+	.food-item .food-info {
 		flex: 1;
 	}
 
-	.name {
+	.food-item .name {
 		font-size: 30rpx;
 		color: #333;
 		margin-bottom: 10rpx;
 	}
 
-	.desc {
-		font-size: 24rpx;
-		color: #999;
-		margin-bottom: 15rpx;
-	}
-
-	.extra {
-		display: flex;
-		font-size: 22rpx;
-		color: #999;
-		margin-bottom: 15rpx;
-	}
-
-	.count {
+	.food-item .count {
 		margin-right: 15rpx;
 	}
 
-	.price {
+	.food-item .price {
 		display: flex;
 		align-items: center;
-	}
-
-	.now {
 		font-size: 32rpx;
 		color: #FF5A5F;
 		margin-right: 10rpx;

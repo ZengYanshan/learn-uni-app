@@ -1,4 +1,10 @@
 <template>
+	<!-- 自定义导航栏 -->
+	<view class="custom-navbar">
+		<image src="/static/images/icon-back.png" class="back-icon" @click="goBack" />
+		<text class="page-title">购物车</text>
+	</view>
+	
 	<view class="cart-page">
 		<!-- 空购物车状态 -->
 		<view v-if="groupedCart.length === 0" class="empty-cart">
@@ -146,6 +152,28 @@
 </script>
 
 <style scoped>
+	/* 自定义导航栏 */
+	.custom-navbar {
+		display: flex;
+		align-items: center;
+		padding: 15rpx 30rpx;
+		background-color: #FF5A5F;
+		color: white;
+	}
+	
+	.back-icon {
+		width: 40rpx;
+		height: 40rpx;
+		margin-right: 20rpx;
+	}
+	
+	.page-title {
+		flex: 1;
+		/* text-align: center; */
+		font-size: 36rpx;
+		font-weight: bold;
+	}
+	
 	.cart-page {
 		display: flex;
 		flex-direction: column;

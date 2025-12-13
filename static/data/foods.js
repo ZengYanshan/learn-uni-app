@@ -1,4 +1,11 @@
 const FOODS = [{
+		"id": 100,
+		"name": "PE塑料袋",
+		"image": "/static/images/plastic-bag.jpg",
+		"price": 300,
+		"description": "由乙烯单体聚合而成，是全球产量最大的塑料品种。"
+	},
+	{
 		"id": 101,
 		"name": "香辣鸡腿堡",
 		"image": "/static/images/food-burger.jpg",

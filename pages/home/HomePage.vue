@@ -3,16 +3,16 @@
 		<!-- 自定义导航栏 -->
 		<view class="custom-navbar">
 			<image src="/static/images/logo.png" class="logo" />
-			<text class="app-name">自定义标题</text>
+			<text class="app-name">塑到家</text>
 			<view class="nav-actions">
-				<image src="/static/images/icon-search.png" class="search-icon" />
-				<image src="/static/images/icon-user.png" class="user-icon" />
+				<!-- <image src="/static/images/icon-search.png" class="search-icon" /> -->
+				<!-- <image src="/static/images/icon-user.png" class="user-icon" /> -->
 			</view>
 		</view>
 
 		<!-- 轮播图 -->
 		<swiper class="banner-swiper" autoplay circular>
-			<swiper-item v-for="(item, index) in banners" :key="index">
+			<swiper-item v-for="(item, index) in banners" :key="index" @click="onClickBanner(item)">
 				<image :src="item.image" mode="aspectFill" class="banner-img" />
 			</swiper-item>
 		</swiper>
@@ -51,11 +51,15 @@
 			return {
 				banners: [{
 						id: 1,
-						image: '/static/images/banner1.jpg'
+						image: '/static/images/banner1.jpg',
+						shopId: 1,
+						foodId: 100
 					},
 					{
 						id: 2,
-						image: '/static/images/banner2.jpg'
+						image: '/static/images/banner2.jpg',
+						shopId: 2,
+						foodId: 202
 					}
 				],
 				// categories: [{
@@ -86,6 +90,7 @@
 				this.shops = SHOPS;
 				// console.log(this.shop);
 			},
+			
 			// 跳转到商家列表页
 			gotoShopList() {
 				uni.navigateTo({
@@ -101,6 +106,9 @@
 				uni.navigateTo({
 					url: _url
 				});
+			},
+			onClickBanner(item) {
+				this.gotoShopDetail(item);
 			}
 		}
 	};

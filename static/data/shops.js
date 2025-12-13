@@ -11,6 +11,7 @@ const SHOPS = [
 		{
 			"category": "主食",
 			"items": [
+				{"foodId": 100},
 				{"foodId": 101},
 				{"foodId": 102}
 			]

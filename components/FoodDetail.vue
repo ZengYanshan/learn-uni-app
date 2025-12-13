@@ -124,39 +124,48 @@
 	.food-detail-wrapper {
 		flex: 1;
 		padding: 10rpx;
-		box-sizing: border-box; /* DEBUG 防止右溢出 */
+		height: 60vh;
+		box-sizing: border-box;
+		/* DEBUG 防止右溢出 */
 	}
 
-	.image-section {
+	.food-detail-wrapper .image-section {
+		position: relative;
+		width: 100%;
+		padding-top: 100%;
+		/* 关键：创建1:1的正方形区域 */
 		margin-bottom: 40rpx;
 		border-radius: 16rpx;
 		overflow: hidden;
 	}
 
-	.food-image {
+	.food-detail-wrapper .food-image {
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
-		height: 600rpx;
+		height: 100%;
 		display: block;
 	}
 
 	.info-section {
 		background: #fff;
-		padding: 30rpx;
+		padding: 10rpx 20rpx;
 		border-radius: 16rpx;
-		margin-bottom: 30rpx;
+		margin-bottom: 10rpx;
 	}
 
 	.food-name {
 		font-size: 40rpx;
 		font-weight: bold;
 		color: #333;
-		margin-bottom: 20rpx;
+		margin-bottom: 10rpx;
 	}
 
 	.price-row {
 		display: flex;
 		align-items: center;
-		margin-bottom: 20rpx;
+		margin-bottom: 10rpx;
 	}
 
 	.price {
@@ -168,12 +177,13 @@
 	.section-header {
 		display: flex;
 		align-items: center;
-		margin-bottom: 20rpx;
-		padding-bottom: 20rpx;
+		margin-bottom: 10rpx;
+		padding-bottom: 10rpx;
 		border-bottom: 1rpx solid #eee;
 	}
 
 	.section-title {
+		padding: 0;
 		font-size: 32rpx;
 		font-weight: bold;
 		color: #333;

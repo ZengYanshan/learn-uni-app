@@ -176,7 +176,7 @@
 
 	.page-title {
 		flex: 1;
-		text-align: center;
+		/* text-align: center; */
 		font-size: 36rpx;
 		font-weight: bold;
 	}
